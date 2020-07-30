@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState} from "react";
+import "./css/App.css";
+import NavigationBar from "./components/NavigationBar";
+import SearchResults from "./components/SearchResults";
+import Footer from "./components/Footer";
+import HomePage from "./components/HomePage";
+// import ToastAlert from "./components/ToastAlert";
+import { Container, Button } from "react-bootstrap";
 
-function App() {
+const App = (props) => {
+  const [showNavBar, setShowNavBar] = useState(false);
+  const [showToastFlag, setShowToastFlag] = useState(false);
+  const [ToastMessage, setToastMessage] = useState("");
+
+
+   function showToast(message) {
+     console.log('show toast funtion')
+    setShowToastFlag(!showToastFlag);
+    setToastMessage(message);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      {showNavBar ? <NavigationBar parentMethod={showToast} /> : ""}
+
+      <br />
+      <Container fluid>
+        <Button
+          onClick={() => setShowNavBar(!showNavBar)}
+          variant={showNavBar ? "danger" : "success"}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {showNavBar ? "Hide NavBar" : " Show Navbar"}
+        </Button>
+      </Container>
+      <br />
+      <HomePage />
+      {showToastFlag ? (
+        <Container center>
+          {/* <ToastAlert
+            parentMethod={showToast}
+            toastMessage={ToastMessage}
+          /> */}
+          <SearchResults message={ToastMessage} />
+        </Container>
+      ) : (
+        ""
+      )}
+      <Footer />
+    </>
   );
-}
+};
 
 export default App;
